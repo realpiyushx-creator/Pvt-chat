@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat Preview</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #e5ddd5;
+      height: 100vh;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 30%;
+      background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80') no-repeat center/cover;
+      display: flex;
+      flex-direction: column;
+      color: white;
+      padding: 16px;
+    }
+
+    .sidebar h2 {
+      margin: 0 0 10px;
+    }
+
+    .room-box {
+      margin-top: 20px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px;
+      border-radius: 10px;
+    }
+
+    .room-box input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    .room-box button {
+      margin-top: 8px;
+      width: 100%;
+      padding: 10px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Chat Area */
+    .chat-area {
+      flex: 1;
+      background: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1500&q=80') no-repeat center/cover;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 18px;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .msg {
+      max-width: 60%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: #222;
+    }
+
+    .me {
+      align-self: flex-end;
+      background: #dcf8c6;
+    }
+
+    .other {
+      align-self: flex-start;
+      background: #fff;
+    }
+
+    .time {
+      font-size: 10px;
+      opacity: 0.6;
+      margin-top: 4px;
+    }
+
+    /* Input Box */
+    .send-box {
+      padding: 10px;
+      background: #f0f0f0;
+      display: flex;
+      gap: 10px;
+    }
+
+    .send-box input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: 1px solid #aaa;
+    }
+
+    .send-box button {
+      padding: 10px 20px;
+      background: #128c7e;
+      color: white;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LEFT: PASSWORD / ROOM SELECT -->
+  <div class="sidebar">
+    <h2>Room Access</h2>
+    <div class="room-box">
+      <label>Password:</label>
+      <input type="password" placeholder="Enter password to open chat" />
+      <button>Unlock Chat</button>
+    </div>
+    <div class="room-box" style="margin-top:20px;">
+      <label>Chat Room Link:</label>
+      <input type="text" placeholder="Room link appears here" />
+      <button>Copy Link</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: CHAT AREA -->
+  <div class="chat-area">
+    <div class="header">WhatsApp Style Chat</div>
+
+    <div class="messages">
+      <div class="msg other">Hello!<div class="time">Today • 10:25 AM</div>
+      </div>
+      <div class="msg me">Hi! How are you?<div class="time">Today • 10:26 AM</div>
+      </div>
+    </div>
+
+    <div class="send-box">
+      <input type="text" placeholder="Type a message" />
+      <button>Send</button>
+    </div>
+  </div>
+
+</body>
+
+</html>
