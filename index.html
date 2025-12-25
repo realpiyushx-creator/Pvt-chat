@@ -3,163 +3,422 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chat Preview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Nexus Chat</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #1e1e2f 0%, #161625 100%);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --primary: #6c5ce7;
+      --primary-hover: #5649c0;
+      --bubble-me: #6c5ce7;
+      --bubble-other: #2d2d3e;
+      --text-main: #ffffff;
+      --text-muted: #a0a0b0;
+      --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    * {
+      box-sizing: border-box;
+      outline: none;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #e5ddd5;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-gradient);
       height: 100vh;
       display: flex;
+      overflow: hidden;
+      color: var(--text-main);
     }
 
-    /* Sidebar */
+    /* --- SIDEBAR --- */
     .sidebar {
-      width: 30%;
-      background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80') no-repeat center/cover;
+      width: 350px;
+      background: rgba(20, 20, 30, 0.95);
+      border-right: 1px solid var(--glass-border);
       display: flex;
       flex-direction: column;
+      padding: 20px;
+      transition: transform 0.3s ease;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary);
+    }
+
+    .sidebar-section {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .sidebar h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin: 0 0 10px 0;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px;
+      padding-right: 40px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
       color: white;
-      padding: 16px;
+      transition: 0.2s;
     }
 
-    .sidebar h2 {
-      margin: 0 0 10px;
+    .input-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
     }
 
-    .room-box {
-      margin-top: 20px;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 12px;
-      border-radius: 10px;
-    }
-
-    .room-box input {
+    .btn-action {
       width: 100%;
       padding: 10px;
-      border-radius: 6px;
-      border: none;
-    }
-
-    .room-box button {
-      margin-top: 8px;
-      width: 100%;
-      padding: 10px;
-      background: #4caf50;
+      background: var(--primary);
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-hover);
+    }
+
+    .close-sidebar {
+      display: none; /* Hidden on desktop */
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
       cursor: pointer;
     }
 
-    /* Chat Area */
+    /* --- CHAT AREA --- */
     .chat-area {
       flex: 1;
-      background: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1500&q=80') no-repeat center/cover;
       display: flex;
       flex-direction: column;
+      position: relative;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(108, 92, 231, 0.05) 0%, transparent 20%);
     }
 
-    .header {
-      padding: 16px;
-      background: rgba(0, 0, 0, 0.6);
+    .chat-header {
+      padding: 15px 25px;
+      background: rgba(22, 22, 37, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 5;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+      border-radius: 50%;
+    }
+
+    .chat-info h4 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .chat-info span {
+      font-size: 12px;
+      color: #4cd137; /* Online green */
+    }
+
+    .menu-toggle {
+      display: none; /* Hidden on desktop */
+      background: none;
+      border: none;
       color: white;
-      font-size: 18px;
+      font-size: 20px;
+      cursor: pointer;
+      margin-right: 10px;
     }
 
-    .messages {
+    /* Messages */
+    .messages-container {
       flex: 1;
-      overflow-y: auto;
       padding: 20px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 15px;
+      scroll-behavior: smooth;
+    }
+
+    /* Custom Scrollbar */
+    .messages-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .messages-container::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
     }
 
     .msg {
-      max-width: 60%;
-      padding: 10px 14px;
-      border-radius: 10px;
-      color: #222;
+      max-width: 70%;
+      padding: 12px 18px;
+      border-radius: 18px;
+      position: relative;
+      line-height: 1.5;
+      font-size: 14px;
+      animation: popIn 0.3s ease;
     }
 
-    .me {
-      align-self: flex-end;
-      background: #dcf8c6;
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .other {
+    .msg.other {
       align-self: flex-start;
-      background: #fff;
+      background: var(--bubble-other);
+      border-bottom-left-radius: 4px;
     }
 
-    .time {
+    .msg.me {
+      align-self: flex-end;
+      background: var(--bubble-me);
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+    }
+
+    .msg-time {
       font-size: 10px;
-      opacity: 0.6;
-      margin-top: 4px;
+      color: rgba(255,255,255,0.6);
+      text-align: right;
+      margin-top: 5px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 4px;
     }
 
-    /* Input Box */
-    .send-box {
-      padding: 10px;
-      background: #f0f0f0;
+    /* Input Area */
+    .chat-input-area {
+      padding: 20px;
+      background: rgba(22, 22, 37, 0.9);
       display: flex;
+      align-items: center;
       gap: 10px;
     }
 
-    .send-box input {
-      flex: 1;
+    .attach-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
       padding: 10px;
-      border-radius: 20px;
-      border: 1px solid #aaa;
+      transition: 0.2s;
+    }
+    .attach-btn:hover { color: var(--primary); }
+
+    .msg-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      padding: 12px 20px;
+      border-radius: 30px;
+      color: white;
+      font-family: inherit;
     }
 
-    .send-box button {
-      padding: 10px 20px;
-      background: #128c7e;
-      color: white;
-      border-radius: 20px;
+    .msg-input:focus {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .send-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: var(--primary);
       border: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .send-btn:hover {
+      transform: scale(1.1);
+      background: var(--primary-hover);
+    }
+
+    /* --- RESPONSIVE MOBILE --- */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+
+      .close-sidebar {
+        display: block;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+      
+      .msg {
+        max-width: 85%;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- LEFT: PASSWORD / ROOM SELECT -->
-  <div class="sidebar">
-    <h2>Room Access</h2>
-    <div class="room-box">
-      <label>Password:</label>
-      <input type="password" placeholder="Enter password to open chat" />
-      <button>Unlock Chat</button>
+  <aside class="sidebar" id="sidebar">
+    <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+    
+    <div class="brand">
+      <i class="fas fa-bolt"></i> NEXUS
     </div>
-    <div class="room-box" style="margin-top:20px;">
-      <label>Chat Room Link:</label>
-      <input type="text" placeholder="Room link appears here" />
-      <button>Copy Link</button>
-    </div>
-  </div>
 
-  <!-- RIGHT: CHAT AREA -->
-  <div class="chat-area">
-    <div class="header">WhatsApp Style Chat</div>
-
-    <div class="messages">
-      <div class="msg other">Hello!<div class="time">Today • 10:25 AM</div>
+    <div class="sidebar-section">
+      <h3>Security</h3>
+      <div class="input-group">
+        <input type="password" placeholder="Enter Room Password" />
       </div>
-      <div class="msg me">Hi! How are you?<div class="time">Today • 10:26 AM</div>
-      </div>
+      <button class="btn-action"><i class="fas fa-lock-open"></i> Unlock Room</button>
     </div>
 
-    <div class="send-box">
-      <input type="text" placeholder="Type a message" />
-      <button>Send</button>
+    <div class="sidebar-section">
+      <h3>Invite</h3>
+      <div class="input-group">
+        <input type="text" value="nexus.chat/r/8392" readonly />
+      </div>
+      <button class="btn-action" style="background: #2d2d3e"><i class="fas fa-copy"></i> Copy Link</button>
     </div>
-  </div>
+  </aside>
+
+  <main class="chat-area">
+    
+    <div class="chat-header">
+      <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="avatar"></div>
+      <div class="chat-info">
+        <h4>Anonymous User</h4>
+        <span><i class="fas fa-circle" style="font-size: 8px;"></i> Online</span>
+      </div>
+      <div style="flex:1"></div>
+      <i class="fas fa-ellipsis-v" style="color: var(--text-muted); cursor: pointer;"></i>
+    </div>
+
+    <div class="messages-container" id="messageContainer">
+      
+      <div class="msg other">
+        Welcome to the secure room.
+        <div class="msg-time">10:00 AM</div>
+      </div>
+      
+      <div class="msg me">
+        Thanks! Is the connection encrypted?
+        <div class="msg-time">10:01 AM <i class="fas fa-check-double"></i></div>
+      </div>
+
+    </div>
+
+    <div class="chat-input-area">
+      <button class="attach-btn"><i class="fas fa-plus"></i></button>
+      <input type="text" class="msg-input" id="msgInput" placeholder="Type a message..." />
+      <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+
+  </main>
+
+  <script>
+    const msgInput = document.getElementById('msgInput');
+    const container = document.getElementById('messageContainer');
+    const sidebar = document.getElementById('sidebar');
+
+    // Handle Enter Key
+    msgInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    // Send Message Logic
+    function sendMessage() {
+      const text = msgInput.value.trim();
+      if (text === "") return;
+
+      // Get current time
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Create HTML structure
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('msg', 'me');
+      msgDiv.innerHTML = `
+        ${text}
+        <div class="msg-time">${timeString} <i class="fas fa-check"></i></div>
+      `;
+
+      // Append and Scroll
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+
+      // Clear input
+      msgInput.value = "";
+    }
+
+    // Toggle Mobile Sidebar
+    function toggleSidebar() {
+      sidebar.classList.toggle('active');
+    }
+  </script>
 
 </body>
-
 </html>
